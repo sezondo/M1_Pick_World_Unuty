@@ -1,25 +1,25 @@
 fileFormatVersion: 2
-guid: aee74423362894f78bfba9084da3db5b
+guid: c35104fe4b3fd8145beba6f812766175
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -5802868875983767809
-    second: SteamMan_jump_0
+      213: -2050515115836288021
+    second: SteamMan_climb_0
   - first:
-      213: 7108562932483463133
-    second: SteamMan_jump_1
+      213: -6377258595460854562
+    second: SteamMan_climb_1
   - first:
-      213: 494696084893305764
-    second: SteamMan_jump_2
+      213: -1025059064577030151
+    second: SteamMan_climb_2
   - first:
-      213: -1596426776360915908
-    second: SteamMan_jump_3
+      213: 4251321664545630239
+    second: SteamMan_climb_3
   - first:
-      213: 7695934992297925817
-    second: SteamMan_jump_4
+      213: 2802937388376197118
+    second: SteamMan_climb_4
   - first:
-      213: -8083232244138625187
-    second: SteamMan_jump_5
+      213: -1932113948721171340
+    second: SteamMan_climb_5
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -154,13 +154,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: SteamMan_jump_0
+      name: SteamMan_climb_0
       rect:
         serializedVersion: 2
-        x: 4
+        x: 5
         y: 0
-        width: 28
-        height: 33
+        width: 23
+        height: 38
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -169,96 +169,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ff631d09081187fa0800000000000000
-      internalID: -5802868875983767809
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: SteamMan_jump_1
-      rect:
-        serializedVersion: 2
-        x: 57
-        y: 0
-        width: 18
-        height: 34
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: dd79f260350b6a260800000000000000
-      internalID: 7108562932483463133
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: SteamMan_jump_2
-      rect:
-        serializedVersion: 2
-        x: 101
-        y: 0
-        width: 21
-        height: 36
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 4ab87dbd7738dd600800000000000000
-      internalID: 494696084893305764
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: SteamMan_jump_3
-      rect:
-        serializedVersion: 2
-        x: 149
-        y: 3
-        width: 21
-        height: 39
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: c3ce51d1e4a58d9e0800000000000000
-      internalID: -1596426776360915908
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: SteamMan_jump_4
-      rect:
-        serializedVersion: 2
-        x: 196
-        y: 2
-        width: 21
-        height: 36
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 9bc9a66c9147dca60800000000000000
-      internalID: 7695934992297925817
+      spriteID: be35202cd5b1b83e0800000000000000
+      internalID: -2050515115836288021
       vertices: []
       indices: 
       edges: []
@@ -267,7 +179,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 30e8423c9a93e8e4f93caaaa543f36ae
+    spriteID: 9efbd222c0967d443bde3c3fb2001927
     internalID: 0
     vertices: []
     indices: 
@@ -277,11 +189,12 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      SteamMan_jump_0: -5802868875983767809
-      SteamMan_jump_1: 7108562932483463133
-      SteamMan_jump_2: 494696084893305764
-      SteamMan_jump_3: -1596426776360915908
-      SteamMan_jump_4: 7695934992297925817
+      SteamMan_climb_0: -2050515115836288021
+      SteamMan_climb_1: -6377258595460854562
+      SteamMan_climb_2: -1025059064577030151
+      SteamMan_climb_3: 4251321664545630239
+      SteamMan_climb_4: 2802937388376197118
+      SteamMan_climb_5: -1932113948721171340
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

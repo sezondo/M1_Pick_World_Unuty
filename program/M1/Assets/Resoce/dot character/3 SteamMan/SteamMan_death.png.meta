@@ -137,6 +137,19 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -149,7 +162,7 @@ TextureImporter:
         width: 22
         height: 37
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -169,9 +182,9 @@ TextureImporter:
         x: 52
         y: 0
         width: 22
-        height: 33
+        height: 37
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -191,9 +204,9 @@ TextureImporter:
         x: 100
         y: 0
         width: 24
-        height: 29
+        height: 38
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -213,9 +226,9 @@ TextureImporter:
         x: 143
         y: 0
         width: 32
-        height: 24
+        height: 38
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -235,9 +248,9 @@ TextureImporter:
         x: 191
         y: 0
         width: 41
-        height: 12
+        height: 38
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -257,9 +270,9 @@ TextureImporter:
         x: 239
         y: 0
         width: 42
-        height: 11
+        height: 37
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -276,7 +289,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5aff871828de5a740a1f262fa1fa33b2
     internalID: 0
     vertices: []
     indices: 
@@ -285,7 +298,13 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      SteamMan_death_0: 8913045925950967760
+      SteamMan_death_1: -1992140375118942715
+      SteamMan_death_2: 7265492052769299911
+      SteamMan_death_3: 6251927883232071213
+      SteamMan_death_4: 8860649773301482043
+      SteamMan_death_5: -7038000109066326460
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
