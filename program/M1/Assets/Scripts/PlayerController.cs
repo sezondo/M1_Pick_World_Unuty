@@ -141,8 +141,6 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        animator.SetBool("Dig", isDig);
-
     }
 
     private void Die()
@@ -181,6 +179,7 @@ public class PlayerController : MonoBehaviour
             {
                 block.TakeDamage(20);   // 곡괭이로 데미지
                 isDig = true;
+                animator.SetTrigger("Dig");
             }
         }
 
