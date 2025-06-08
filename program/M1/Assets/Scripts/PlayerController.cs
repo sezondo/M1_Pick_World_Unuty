@@ -11,10 +11,14 @@ public class PlayerController : MonoBehaviour
     private bool isDead = false; // 사망 상태
     private bool isRun = false;
     private bool isDoubleJumping = false;
+    private bool isDig = false;
     private int playerHP = 100;
     private float playerSpeed = 5;
     private bool playerDirection = false; // false일때 오른쪽 true일떄 왼쪽
-    
+
+    public float digCooldown = 0.5f; // 곡괭이질 쿨타임 (초)
+    private float lastDigTime = -10f;
+
 
     private Rigidbody2D playerRigidbody; // 사용할 리지드바디 컴포넌트
     private Animator animator; // 사용할 애니메이터 컴포넌트
@@ -39,6 +43,9 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
+        CheckGrounded();
+
+
         if (Input.GetKeyDown(KeyCode.Space) && jumpCount < 2)//점프 2단까지 가능능
         {
             jumpCount++;
@@ -62,12 +69,12 @@ public class PlayerController : MonoBehaviour
         float xInput = Input.GetAxisRaw("Horizontal");
         //float zInput = Input.GetAxisRaw("Vertical");
 
-        if (Input.GetKey(KeyCode.RightArrow))//우측이동동
+        if (Input.GetKey(KeyCode.RightArrow) && !isDig)//우측이동동
         {
             playerDirection = false;
             playerRigidbody.linearVelocity = new Vector2(xInput * playerSpeed, playerRigidbody.linearVelocity.y);
         }
-        else if (Input.GetKey(KeyCode.LeftArrow))//좌측이동동
+        else if (Input.GetKey(KeyCode.LeftArrow) && !isDig)//좌측이동동
         {
             playerDirection = true;
             playerRigidbody.linearVelocity = new Vector2(xInput * playerSpeed, playerRigidbody.linearVelocity.y);
@@ -94,6 +101,48 @@ public class PlayerController : MonoBehaviour
 
         animator.SetBool("Run", isRun);
 
+        //클라이밍 여따가 추가
+
+
+
+
+
+
+
+
+
+
+
+        //여기부턴 땅파기
+        isDig = false;
+
+        if (Time.time - lastDigTime < digCooldown)
+            return;
+
+
+        Vector2 digDir = Vector2.zero;
+
+
+        if (isGrounded)
+        {
+            if (Input.GetKey(KeyCode.RightArrow))
+                digDir = Vector2.right;
+
+            else if (Input.GetKey(KeyCode.LeftArrow))
+                digDir = Vector2.left;
+
+            else if (Input.GetKey(KeyCode.DownArrow))
+                digDir = Vector2.down;
+
+            if (digDir != Vector2.zero)
+            {
+                TryDig(digDir);
+                lastDigTime = Time.time; // 쿨타임 갱신
+            }
+        }
+
+        animator.SetBool("Dig", isDig);
+
     }
 
     private void Die()
@@ -109,18 +158,48 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        // 바닥에 닿았음을 감지하는 처리
-        if (collision.contacts[0].normal.y > 0.7f) // -0.7하면 반대의 경우도 가능
-        {
-            isGrounded = true;
-            //lastGroundedY = transform.position.y;
-            jumpCount = 0;
-        }
+                jumpCount = 0;
     }
 
-    private void OnCollisionExit2D(Collision2D collision)
+
+    void TryDig(Vector2 direction)
     {
-        isGrounded = false;
+        // 2D 마인크래프트 박스형 기준: 내 위치 + 방향*0.5f 만큼 offset(블록 중앙~중앙 맞춤)
+        Vector2 origin = (Vector2)transform.position + direction * 0.5f;
+        float digDistance = 0.6f; // 1칸 딱 맞도록
+
+        // "Dirt" 레이어에만 맞게 (블록 오브젝트에 Dirt 레이어 지정)
+        int mask = LayerMask.GetMask("Dirt");
+
+        RaycastHit2D hit = Physics2D.Raycast(origin, direction, digDistance, mask);
+
+        // 맞은 게 있으면 Damage
+        if (hit.collider != null)
+        {
+            DirtBlock block = hit.collider.GetComponent<DirtBlock>();
+            if (block != null)
+            {
+                block.TakeDamage(20);   // 곡괭이로 데미지
+                isDig = true;
+            }
+        }
+
+        // 디버깅용: 씬 뷰에서 Ray 표시
+        Debug.DrawRay(origin, direction * digDistance, Color.red, 0.2f);
+
+    }
+
+
+    void CheckGrounded()
+    {
+        // 플레이어 발밑 기준, 살짝 아래쪽(플레이어 중심보다 -0.5, Sprite 따라 조정)
+        Vector2 groundCheckPos = (Vector2)transform.position + Vector2.down * 0.6f;
+        float radius = 0.23f; // 플레이어 폭에 맞게 조절
+
+        // "Ground" (혹은 "Dirt") Layer에만 반응하도록
+        isGrounded = Physics2D.OverlapCircle(groundCheckPos, radius, LayerMask.GetMask("Ground", "Dirt"));
+        // LayerMask는 실제 프로젝트 설정에 맞게 조정!
+
     }
 
 
