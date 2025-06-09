@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 // PlayerController는 플레이어 캐릭터로서 Player 게임 오브젝트를 제어한다.
 public class PlayerController : MonoBehaviour
@@ -12,12 +13,16 @@ public class PlayerController : MonoBehaviour
     private bool isRun = false;
     private bool isDoubleJumping = false;
     private bool isDig = false;
+    private bool isUnderground = false;
     private int playerHP = 100;
-    private float playerSpeed = 5;
+    private float playerSpeed = 3f;
     private bool playerDirection = false; // false일때 오른쪽 true일떄 왼쪽
 
-    public float digCooldown = 0.5f; // 곡괭이질 쿨타임 (초)
-    private float lastDigTime = -10f;
+    private float digCooldown = 0.7f; // 곡괭이질 쿨타임 (초)
+    private bool isDigging = false;
+    private float digTimer = 0f;
+    private DirtBlock currentBlock = null;
+    
 
 
     private Rigidbody2D playerRigidbody; // 사용할 리지드바디 컴포넌트
@@ -114,35 +119,73 @@ public class PlayerController : MonoBehaviour
 
 
         //여기부턴 땅파기
-        isDig = false;
-
-        if (Time.time - lastDigTime < digCooldown)
-            return;
-
+        //isDig = false;
 
         Vector2 digDir = Vector2.zero;
+        if (Input.GetKey(KeyCode.RightArrow)) digDir = Vector2.right;
+        else if (Input.GetKey(KeyCode.LeftArrow)) digDir = Vector2.left;
+        else if (Input.GetKey(KeyCode.DownArrow)) digDir = Vector2.down;
 
-
-        if (isGrounded)
+        if (digDir != Vector2.zero && !isUnderground)//내일 여기 이즈 클라이밍 추가
         {
-            if (Input.GetKey(KeyCode.RightArrow))
-                digDir = Vector2.right;
+            // 벽 감지
+            Vector2 origin = (Vector2)transform.position + digDir * 0.5f;
+            float digDistance = 0.15f;
+            int mask = LayerMask.GetMask("Dirt");
+            RaycastHit2D hit = Physics2D.Raycast(origin, digDir, digDistance, mask);//레이시스트 삐융
 
-            else if (Input.GetKey(KeyCode.LeftArrow))
-                digDir = Vector2.left;
-
-            else if (Input.GetKey(KeyCode.DownArrow))
-                digDir = Vector2.down;
-
-            if (digDir != Vector2.zero)
+            if (hit.collider != null && isGrounded)
             {
-                TryDig(digDir);
-                lastDigTime = Time.time; // 쿨타임 갱신
+                DirtBlock block = hit.collider.GetComponent<DirtBlock>();
+                if (block != null)
+                {
+                    if (!isDigging || block != currentBlock) // 첫 블럭럭
+                    {
+                        isDigging = true;
+                        digTimer = 0f; // 즉시 데미지 X (애니만 실행)
+                        currentBlock = block; //이걸로 다른블럭인지 체크
+                        animator.SetBool("Dig", true);
+                    }
+
+                    digTimer += Time.deltaTime;
+                    if (digTimer >= digCooldown)
+                    {
+                        block.TakeDamage(20);
+                        digTimer = 0f;
+                        // 사운드/이펙트도 여기!
+                    }
+                }
+                else
+                {
+                    StopDig();
+                }
             }
+            else
+            {
+                StopDig();
+            }
+        }
+        else
+        {
+            StopDig();
+
         }
 
     }
 
+    void StopDig()
+    {
+        if (isDigging)
+        {
+            isDigging = false;
+            digTimer = 0f;
+            currentBlock = null;
+            animator.SetBool("Dig", false);
+        }
+
+    }
+
+    
     private void Die()
     {
         animator.SetTrigger("Die");
@@ -152,6 +195,7 @@ public class PlayerController : MonoBehaviour
 
         GameManager.instance.OnPlayerDead();
 
+    
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -159,34 +203,6 @@ public class PlayerController : MonoBehaviour
                 jumpCount = 0;
     }
 
-
-    void TryDig(Vector2 direction)
-    {
-        // 2D 마인크래프트 박스형 기준: 내 위치 + 방향*0.5f 만큼 offset(블록 중앙~중앙 맞춤)
-        Vector2 origin = (Vector2)transform.position + direction * 0.5f;
-        float digDistance = 0.6f; // 1칸 딱 맞도록
-
-        // "Dirt" 레이어에만 맞게 (블록 오브젝트에 Dirt 레이어 지정)
-        int mask = LayerMask.GetMask("Dirt");
-
-        RaycastHit2D hit = Physics2D.Raycast(origin, direction, digDistance, mask);
-
-        // 맞은 게 있으면 Damage
-        if (hit.collider != null)
-        {
-            DirtBlock block = hit.collider.GetComponent<DirtBlock>();
-            if (block != null)
-            {
-                block.TakeDamage(20);   // 곡괭이로 데미지
-                isDig = true;
-                animator.SetTrigger("Dig");
-            }
-        }
-
-        // 디버깅용: 씬 뷰에서 Ray 표시
-        Debug.DrawRay(origin, direction * digDistance, Color.red, 0.2f);
-
-    }
 
 
     void CheckGrounded()
