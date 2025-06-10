@@ -13,7 +13,9 @@ public class PlayerController : MonoBehaviour
     private bool isRun = false;
     private bool isDoubleJumping = false;
     private bool isDig = false;
-    private bool isUnderground = false;
+    private bool Underground = false;
+    private bool isClimbing = false;
+    private bool isClimbingIdle = false;
     private int playerHP = 100;
     private float playerSpeed = 3f;
     private bool playerDirection = false; // false일때 오른쪽 true일떄 왼쪽
@@ -72,14 +74,15 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("Grounded", isGrounded);//이걸로 점프 했냐 안했냐 애니메이션
 
         float xInput = Input.GetAxisRaw("Horizontal");
+        float yInput = Input.GetAxisRaw("Vertical");
         //float zInput = Input.GetAxisRaw("Vertical");
 
-        if (Input.GetKey(KeyCode.RightArrow) && !isDig)//우측이동동
+        if (Input.GetKey(KeyCode.RightArrow) && !isDig && !isClimbing)//우측이동동
         {
             playerDirection = false;
             playerRigidbody.linearVelocity = new Vector2(xInput * playerSpeed, playerRigidbody.linearVelocity.y);
         }
-        else if (Input.GetKey(KeyCode.LeftArrow) && !isDig)//좌측이동동
+        else if (Input.GetKey(KeyCode.LeftArrow) && !isDig && !isClimbing)//좌측이동동
         {
             playerDirection = true;
             playerRigidbody.linearVelocity = new Vector2(xInput * playerSpeed, playerRigidbody.linearVelocity.y);
@@ -107,8 +110,52 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("Run", isRun);
 
         //클라이밍 여따가 추가
+/*
+        Vector2 ClimbingDir = Vector2.zero;
+        if (Input.GetKey(KeyCode.RightArrow)) ClimbingDir = Vector2.right;
+        else if (Input.GetKey(KeyCode.LeftArrow)) ClimbingDir = Vector2.left;
+        else if (Input.GetKey(KeyCode.DownArrow)) ClimbingDir = Vector2.down;
+        else if (Input.GetKey(KeyCode.DownArrow)) ClimbingDir = Vector2.up;
+*/
+        if (Underground)
+        {
 
+            if ((Input.GetKeyDown(KeyCode.UpArrow) && !isGrounded) || isClimbing)
+            {
 
+                if (!isClimbing)
+                {
+                    animator.speed = 0;
+                    isClimbing = true;
+                    playerRigidbody.gravityScale = 0f;
+                    playerRigidbody.linearVelocity = Vector2.zero;
+                    jumpCount = 1;
+                }
+            }
+
+            if (isClimbing)
+            {
+                float flyX = 0, flyY = 0;
+
+                if (Input.GetKey(KeyCode.UpArrow)) flyY = 1;
+                else if (Input.GetKey(KeyCode.DownArrow)) flyY = -1;
+                else if (Input.GetKey(KeyCode.RightArrow)) flyX = 1;
+                else if (Input.GetKey(KeyCode.LeftArrow)) flyX = -1;
+
+                playerRigidbody.linearVelocity = new Vector2(flyX * playerSpeed, flyY * playerSpeed);
+
+                animator.speed = (flyX != 0 || flyY != 0) ? 1 : 0;
+            }
+            
+            if (isGrounded || Input.GetKeyDown(KeyCode.Space))
+            {
+                StopClimbing();
+            }
+            
+        }
+        else StopClimbing();
+        
+        animator.SetBool("isClimbing", isClimbing);
 
 
 
@@ -126,11 +173,11 @@ public class PlayerController : MonoBehaviour
         else if (Input.GetKey(KeyCode.LeftArrow)) digDir = Vector2.left;
         else if (Input.GetKey(KeyCode.DownArrow)) digDir = Vector2.down;
 
-        if (digDir != Vector2.zero && !isUnderground)//내일 여기 이즈 클라이밍 추가
+        if (digDir != Vector2.zero && !isClimbing)//내일 여기 이즈 클라이밍 추가
         {
             // 벽 감지
             Vector2 origin = (Vector2)transform.position + digDir * 0.5f;
-            float digDistance = 0.15f;
+            float digDistance = 0.7f;
             int mask = LayerMask.GetMask("Dirt");
             RaycastHit2D hit = Physics2D.Raycast(origin, digDir, digDistance, mask);//레이시스트 삐융
 
@@ -185,6 +232,18 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    void StopClimbing()
+    {
+        if (isClimbing)
+        {
+            animator.speed = 1;
+            isClimbing = false;
+            playerRigidbody.gravityScale = 1f;
+            animator.SetBool("isClimbing", isClimbing);
+        }
+        
+    }
+
     
     private void Die()
     {
@@ -195,12 +254,30 @@ public class PlayerController : MonoBehaviour
 
         GameManager.instance.OnPlayerDead();
 
-    
+
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-                jumpCount = 0;
+        jumpCount = 0;
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Underground"))
+        {
+            Underground = true;
+
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Underground"))
+        {
+            Underground = false;
+
+        }
     }
 
 
@@ -209,7 +286,7 @@ public class PlayerController : MonoBehaviour
     {
         // 플레이어 발밑 기준, 살짝 아래쪽(플레이어 중심보다 -0.5, Sprite 따라 조정)
         Vector2 groundCheckPos = (Vector2)transform.position + Vector2.down * 0.6f;
-        float radius = 0.23f; // 플레이어 폭에 맞게 조절
+        float radius = 0.02f; // 플레이어 폭에 맞게 조절
 
         // "Ground" (혹은 "Dirt") Layer에만 반응하도록
         isGrounded = Physics2D.OverlapCircle(groundCheckPos, radius, LayerMask.GetMask("Ground", "Dirt"));
