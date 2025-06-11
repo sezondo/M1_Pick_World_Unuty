@@ -32,6 +32,10 @@ public class PlayerController : MonoBehaviour
 
     private SpriteRenderer spriteRenderer; //캐릭터 본체임 이게 그래픽
 
+
+    private GameObject booster1;//부스터 1
+    private GameObject booster2;//부스터 2
+
     private void Start()
     {
         // 초기화
@@ -39,6 +43,8 @@ public class PlayerController : MonoBehaviour
         playerRigidbody = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        booster1 = transform.Find("vfx_SciFiThruster01").gameObject;
+        booster2 = transform.Find("vfx_SciFiThruster02").gameObject;
 
     }
 
@@ -77,15 +83,23 @@ public class PlayerController : MonoBehaviour
         float yInput = Input.GetAxisRaw("Vertical");
         //float zInput = Input.GetAxisRaw("Vertical");
 
-        if (Input.GetKey(KeyCode.RightArrow) && !isDig && !isClimbing)//우측이동동
+        if (Input.GetKey(KeyCode.RightArrow) && !isDig )//우측이동동
         {
             playerDirection = false;
-            playerRigidbody.linearVelocity = new Vector2(xInput * playerSpeed, playerRigidbody.linearVelocity.y);
+            if (!isClimbing)
+            {
+                playerRigidbody.linearVelocity = new Vector2(xInput * playerSpeed, playerRigidbody.linearVelocity.y);
+
+            }
         }
-        else if (Input.GetKey(KeyCode.LeftArrow) && !isDig && !isClimbing)//좌측이동동
+        else if (Input.GetKey(KeyCode.LeftArrow) && !isDig )//좌측이동동
         {
             playerDirection = true;
-            playerRigidbody.linearVelocity = new Vector2(xInput * playerSpeed, playerRigidbody.linearVelocity.y);
+            if (!isClimbing)
+            {
+                playerRigidbody.linearVelocity = new Vector2(xInput * playerSpeed, playerRigidbody.linearVelocity.y);
+
+            }
         }
 
 
@@ -125,26 +139,40 @@ public class PlayerController : MonoBehaviour
 
                 if (!isClimbing)
                 {
-                    animator.speed = 0;
+                    
                     isClimbing = true;
-                    playerRigidbody.gravityScale = 0f;
-                    playerRigidbody.linearVelocity = Vector2.zero;
+                    playerRigidbody.gravityScale = 0.5f;
+                    //playerRigidbody.linearVelocity = Vector2.zero;
                     jumpCount = 1;
                 }
             }
 
             if (isClimbing)
             {
-                float flyX = 0, flyY = 0;
 
-                if (Input.GetKey(KeyCode.UpArrow)) flyY = 1;
-                else if (Input.GetKey(KeyCode.DownArrow)) flyY = -1;
-                else if (Input.GetKey(KeyCode.RightArrow)) flyX = 1;
-                else if (Input.GetKey(KeyCode.LeftArrow)) flyX = -1;
+                Vector2 move = Vector2.zero;
+                if (Input.GetKey(KeyCode.RightArrow)) move.x = 1;
+                if (Input.GetKey(KeyCode.LeftArrow)) move.x = -1;
 
-                playerRigidbody.linearVelocity = new Vector2(flyX * playerSpeed, flyY * playerSpeed);
+                float moveSpeed = playerSpeed;
+                playerRigidbody.linearVelocity = new Vector2(move.x * moveSpeed, playerRigidbody.linearVelocity.y);
 
-                animator.speed = (flyX != 0 || flyY != 0) ? 1 : 0;
+                if (Input.GetKey(KeyCode.UpArrow))
+                {
+                    float rocketPower = 1.5f; // 로켓 추친력
+                    playerRigidbody.AddForce(Vector2.up * rocketPower);
+                    animator.speed = 1;
+
+                    booster1.gameObject.SetActive(true);
+                    booster2.gameObject.SetActive(true);
+                }
+                else
+                {
+                    animator.speed = 0;
+                    booster1.gameObject.SetActive(false);
+                    booster2.gameObject.SetActive(false);
+                }
+
             }
             
             if (isGrounded || Input.GetKeyDown(KeyCode.Space))
@@ -240,6 +268,8 @@ public class PlayerController : MonoBehaviour
             isClimbing = false;
             playerRigidbody.gravityScale = 1f;
             animator.SetBool("isClimbing", isClimbing);
+            booster1.gameObject.SetActive(false);
+            booster2.gameObject.SetActive(false);
         }
         
     }
