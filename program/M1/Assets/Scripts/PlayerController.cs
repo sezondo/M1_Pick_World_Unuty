@@ -5,20 +5,20 @@ using System.Collections;
 public class PlayerController : MonoBehaviour
 {
 
-    public float jumpForce = 450; // 점프 힘
+    public float jumpForce = 550; // 점프 힘
+    public float boost = 4f;
 
     private int jumpCount = 0; // 누적 점프 횟수
     private bool isGrounded = false; // 바닥에 닿았는지 나타냄
-    private bool isDead = false; // 사망 상태
+    //private bool isDead = false; // 사망 상태
     private bool isRun = false;
     private bool isDoubleJumping = false;
     private bool isDig = false;
     private bool Underground = false;
     private bool isClimbing = false;
     private bool isClimbingIdle = false;
-    private int playerHP = 100;
     private float playerSpeed = 3f;
-    private bool playerDirection = false; // false일때 오른쪽 true일떄 왼쪽
+    public bool playerDirection = false; // false일때 오른쪽 true일떄 왼쪽
 
     private float digCooldown = 0.7f; // 곡괭이질 쿨타임 (초)
     private bool isDigging = false;
@@ -36,6 +36,8 @@ public class PlayerController : MonoBehaviour
     private GameObject booster1;//부스터 1
     private GameObject booster2;//부스터 2
 
+    public PlayerHp playerHp;
+
     private void Start()
     {
         // 초기화
@@ -45,14 +47,17 @@ public class PlayerController : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         booster1 = transform.Find("vfx_SciFiThruster01").gameObject;
         booster2 = transform.Find("vfx_SciFiThruster02").gameObject;
+        playerHp = GetComponent<PlayerHp>();
 
     }
 
     private void Update()
     {
         // 사용자 입력을 감지하고 점프하는 처리
-        if (isDead)
+        if (playerHp.isDead)
         {
+            StopDig();
+            StopClimbing();
             return;
         }
 
@@ -159,7 +164,7 @@ public class PlayerController : MonoBehaviour
 
                 if (Input.GetKey(KeyCode.UpArrow))
                 {
-                    float rocketPower = 1.5f; // 로켓 추친력
+                    float rocketPower = boost; // 로켓 추친력
                     playerRigidbody.AddForce(Vector2.up * rocketPower);
                     animator.speed = 1;
 
@@ -274,18 +279,6 @@ public class PlayerController : MonoBehaviour
         
     }
 
-    
-    private void Die()
-    {
-        animator.SetTrigger("Die");
-
-        playerRigidbody.linearVelocity = Vector2.zero;
-        isDead = true;
-
-        GameManager.instance.OnPlayerDead();
-
-
-    }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
