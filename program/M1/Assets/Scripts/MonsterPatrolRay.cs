@@ -9,14 +9,18 @@ public class MonsterPatrolRay : MonoBehaviour
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
     private Animator animator;
+    private MonsterAttack monsterAttack;
+    private MonsterHp monsterHp;
 
     private bool isRun;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        monsterHp = GetComponent<MonsterHp>();
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
+        monsterAttack = GetComponent<MonsterAttack>();
     }
 
     // Update is called once per frame
@@ -24,9 +28,16 @@ public class MonsterPatrolRay : MonoBehaviour
     {
         CheckGrounded();
 
+        if (monsterHp.isDie)
+        {
+            isRun = false;
+            animator.SetBool("Run", isRun);
+            return;
+        }
+
 
         Vector2 dir = movingLeft ? Vector2.left : Vector2.right;
-        if (isGrounded)
+        if (isGrounded && !monsterAttack.isAttacking)
         {
             rb.linearVelocity = dir * speed;
         }

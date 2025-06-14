@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D playerRigidbody; // 사용할 리지드바디 컴포넌트
     private Animator animator; // 사용할 애니메이터 컴포넌트
 
-    private SpriteRenderer spriteRenderer; //캐릭터 본체임 이게 그래픽
+    public SpriteRenderer spriteRenderer; //캐릭터 본체임 이게 그래픽
 
 
     private GameObject booster1;//부스터 1

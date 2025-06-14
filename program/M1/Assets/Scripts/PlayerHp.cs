@@ -24,7 +24,7 @@ public class PlayerHp : MonoBehaviour
         imgBar.transform.localScale = new Vector3(hp/100.0f,1,1);
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(int damage)
     {
         Debug.Log("플레이어 피해 입음");
 
@@ -43,6 +43,7 @@ public class PlayerHp : MonoBehaviour
 
         if (hp <= 0f)
         {
+            GameManager.instance.isGameover = true;
             isDead = true;
             GetComponent<Animator>().SetTrigger("isDie");
             //Destroy(gameObject, 1);

@@ -5,7 +5,6 @@ public class MonsterHp : MonoBehaviour
 
     public int maxHP = 3;
     private int currentHP;
-    public float moveSpeed = 2f;
     public bool isDie = false;
 
     private Transform player;
