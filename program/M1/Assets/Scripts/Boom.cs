@@ -68,6 +68,7 @@ public class Boom : MonoBehaviour
 
             target.GetComponent<PlayerHp>()?.TakeDamage(firstDamageAmount);
             target.GetComponent<DirtBlock>()?.TakeDamage(firstDamageAmount);
+            target.GetComponent<MonsterHp>()?.TakeDamage(secondDamageAmount);
 
             Rigidbody2D rb = target.GetComponent<Rigidbody2D>();
             if (rb != null)
@@ -86,6 +87,7 @@ public class Boom : MonoBehaviour
 
             target.GetComponent<PlayerHp>()?.TakeDamage(secondDamageAmount);
             target.GetComponent<DirtBlock>()?.TakeDamage(secondDamageAmount);
+            target.GetComponent<MonsterHp>()?.TakeDamage(secondDamageAmount);
 
             Rigidbody2D rb = target.GetComponent<Rigidbody2D>();
             if (rb != null)
