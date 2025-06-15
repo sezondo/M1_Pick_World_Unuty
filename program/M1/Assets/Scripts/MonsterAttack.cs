@@ -9,6 +9,9 @@ public class MonsterAttack : MonoBehaviour
     private Animator animator;
     public bool isAttacking = false;
     private SpriteRenderer spriteRenderer;
+
+    public AudioClip MonsterAttackSound;
+    public AudioSource MonsterAttackSource;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -31,6 +34,7 @@ public class MonsterAttack : MonoBehaviour
 
         if (hit.collider != null)
         {
+            MonsterAttackSource.PlayOneShot(MonsterAttackSound);
             animator.SetTrigger("Attack"); // 애니메이션 트리거
             isAttacking = true;
         }
@@ -40,6 +44,7 @@ public class MonsterAttack : MonoBehaviour
 
     public void EnableHitbox()
     {
+        Debug.Log("[EnableHitbox]");
         if (spriteRenderer.flipX)
         {
             hitboxLeft.gameObject.SetActive(true);
@@ -54,6 +59,7 @@ public class MonsterAttack : MonoBehaviour
 
     public void DisableHitbox()
     {
+        Debug.Log("[DisableHitbox]");
         hitboxRight.gameObject.SetActive(false);
         hitboxLeft.gameObject.SetActive(false);
         isAttacking = false;

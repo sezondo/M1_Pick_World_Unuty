@@ -38,6 +38,17 @@ public class PlayerController : MonoBehaviour
 
     public PlayerHp playerHp;
 
+    public AudioClip jumpSound;
+    public AudioSource jumpSoundSource;
+
+    public AudioClip digingSound;
+    public AudioSource digingSoundSource;
+
+    public AudioClip boosterSound;
+    public AudioSource boosterSoundSound;
+
+
+
     private void Start()
     {
         // 초기화
@@ -68,6 +79,8 @@ public class PlayerController : MonoBehaviour
         {
             jumpCount++;
             playerRigidbody.linearVelocity = Vector2.zero;
+
+            jumpSoundSource.PlayOneShot(jumpSound);
 
             playerRigidbody.AddForce(new Vector2(0, jumpForce));
 
@@ -170,12 +183,19 @@ public class PlayerController : MonoBehaviour
 
                     booster1.gameObject.SetActive(true);
                     booster2.gameObject.SetActive(true);
+                    if (!boosterSoundSound.isPlaying)
+                    {
+                        boosterSoundSound.Play();
+                    }
+
+
                 }
                 else
                 {
                     animator.speed = 0;
                     booster1.gameObject.SetActive(false);
                     booster2.gameObject.SetActive(false);
+                    boosterSoundSound.Stop();
                 }
 
             }
@@ -232,7 +252,8 @@ public class PlayerController : MonoBehaviour
                     {
                         block.TakeDamage(20);
                         digTimer = 0f;
-                        // 사운드/이펙트도 여기!
+                        digingSoundSource.PlayOneShot(digingSound);
+                        
                     }
                 }
                 else
@@ -275,6 +296,7 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("isClimbing", isClimbing);
             booster1.gameObject.SetActive(false);
             booster2.gameObject.SetActive(false);
+            boosterSoundSound.Stop();
         }
         
     }

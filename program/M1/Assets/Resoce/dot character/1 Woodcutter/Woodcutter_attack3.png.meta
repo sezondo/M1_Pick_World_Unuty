@@ -137,6 +137,19 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -285,7 +298,13 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Woodcutter_attack3_0: -563011182774864289
+      Woodcutter_attack3_1: -73837900130729904
+      Woodcutter_attack3_2: 2892931569953311878
+      Woodcutter_attack3_3: 4594443588837451308
+      Woodcutter_attack3_4: 4528181625619920492
+      Woodcutter_attack3_5: 6917326716163552830
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
