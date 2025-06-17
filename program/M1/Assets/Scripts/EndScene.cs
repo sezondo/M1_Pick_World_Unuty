@@ -40,9 +40,13 @@ public class EndScene : MonoBehaviour
 
         uiText.color = color;
 
-        if (Input.GetKeyDown(KeyCode.Space)) // 화면 터치 or 마우스 클릭
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             SceneManager.LoadScene("Main");
+        }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
         }
     }
     

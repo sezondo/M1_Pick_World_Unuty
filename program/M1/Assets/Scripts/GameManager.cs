@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
-using Microsoft.Unity.VisualStudio.Editor;
+
 
 // 게임 오버 상태를 표현하고, 게임 점수와 UI를 관리하는 게임 매니저
 // 씬에는 단 하나의 게임 매니저만 존재할 수 있다.
@@ -54,7 +54,12 @@ public class GameManager : MonoBehaviour {
             keyUse.SetActive(false);
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
     }
+    
 
     // 플레이어 캐릭터가 사망시 게임 오버를 실행하는 메서드
     public void OnPlayerDead()

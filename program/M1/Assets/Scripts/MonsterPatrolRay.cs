@@ -11,6 +11,7 @@ public class MonsterPatrolRay : MonoBehaviour
     private Animator animator;
     private MonsterAttack monsterAttack;
     private MonsterHp monsterHp;
+    public float groundCheckPosRe = 0.02f;
 
     private bool isRun;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -43,7 +44,7 @@ public class MonsterPatrolRay : MonoBehaviour
         }
 
 
-        int mask = LayerMask.GetMask("Dirt");
+        int mask = LayerMask.GetMask("Dirt","Ground");
 
         RaycastHit2D hit = Physics2D.Raycast(transform.position, dir, rayDistance, mask);
         if (hit.collider != null)
@@ -73,7 +74,7 @@ public class MonsterPatrolRay : MonoBehaviour
     {
         // 플레이어 발밑 기준, 살짝 아래쪽(플레이어 중심보다 -0.5, Sprite 따라 조정)
         Vector2 groundCheckPos = (Vector2)transform.position + Vector2.down * 0.6f;
-        float radius = 0.02f; // 플레이어 폭에 맞게 조절
+        float radius = groundCheckPosRe; // 플레이어 폭에 맞게 조절
 
         // "Ground" (혹은 "Dirt") Layer에만 반응하도록
         isGrounded = Physics2D.OverlapCircle(groundCheckPos, radius, LayerMask.GetMask("Ground", "Dirt"));
